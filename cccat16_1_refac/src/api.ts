@@ -12,6 +12,9 @@ app.get("/", async function (_, res) {
 app.post("/signup", async function (req, res) {
   const connection = pgp()("postgres://postgres:ride123@localhost:5432/ride");
 
+  const isValidName = (name: string) => name.match(/[a-zA-Z] [a-zA-Z]+/);
+  const isValidEmail = (email: string) => email.match(/^(.+)@(.+)$/);
+
   try {
     const [acc] = await connection.query(
       "SELECT * FROM account WHERE email = $1",
@@ -20,10 +23,10 @@ app.post("/signup", async function (req, res) {
     if (acc) {
       return res.status(409).send({ message: "Usuário já existe" });
     }
-    if (!req.body.name.match(/[a-zA-Z] [a-zA-Z]+/)) {
+    if (!isValidName(req.body.name)) {
       return res.status(409).send({ message: "Nome inválido" });
     }
-    if (!req.body.email.match(/^(.+)@(.+)$/)) {
+    if (!isValidEmail(req.body.email)) {
       return res.status(409).send({ message: "Email inválido" });
     }
     if (!validate(req.body.cpf)) {
