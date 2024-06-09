@@ -59,7 +59,7 @@ test("Deve retornar mensagem de erro caso Nome seja inválido", async function (
   expect(output.data).toStrictEqual({ message: "Nome inválido" });
 });
 
-test("Deve retornar -4 ao criar conta existente", async function () {
+test("Deve retornar messagem de erro ao criar conta existente", async function () {
   const input = {
     name: "John Doe",
     email: `noob@gmail.com`,
