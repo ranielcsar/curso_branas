@@ -71,6 +71,19 @@ test("Deve retornar messagem de erro ao criar conta existente", async function (
   expect(output.data).toStrictEqual({ message: "Usuário já existe" });
 });
 
+test("Deve retornar messagem de erro ao ter placa inválida", async function () {
+  const input = {
+    name: "John Doe",
+    email: `john.doe${Math.floor(Math.random() * 1000)}@gmail.com`,
+    cpf: "87748248800",
+    isDriver: true,
+    carPlate: "1231231",
+  };
+  const output = await axios.post("http://localhost:3000/signup", input);
+  expect(output.status).toBe(409);
+  expect(output.data).toStrictEqual({ message: "Placa inválida" });
+});
+
 test("Deve deletar uma conta", async function () {
   const result = await axios.delete(
     `http://localhost:3000/account/${accountId}`
